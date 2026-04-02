@@ -76,6 +76,11 @@ kotlin {
             implementation(libs.napier)
         }
 
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
+        }
+
         androidMain.dependencies {
             implementation(libs.ktor.android.client)
         }
