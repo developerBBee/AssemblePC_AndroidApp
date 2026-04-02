@@ -2,7 +2,6 @@ package jp.developer.bbee.assemblepc.shared.presentation
 
 import jp.developer.bbee.assemblepc.shared.domain.model.Composition
 import jp.developer.bbee.assemblepc.shared.domain.model.enums.DeviceType
-import jp.developer.bbee.assemblepc.shared.domain.model.toPrice
 import jp.developer.bbee.assemblepc.shared.fixtures.createAssembly
 import jp.developer.bbee.assemblepc.shared.fixtures.createDevice
 import jp.developer.bbee.assemblepc.shared.presentation.screen.device.DeviceUiState
