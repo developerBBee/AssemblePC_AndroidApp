@@ -19,7 +19,7 @@ class RenameAssemblyUseCaseTest {
     )
 
     @Test
-    fun `invoke renames assembly in repository`() = runTest {
+    fun `repositoryのassemblyを改名する`() = runTest {
         useCase("新しい名前", assemblyId = 1)
 
         assertEquals("新しい名前", fakeDeviceRepo.renamedAssemblyName)
@@ -27,7 +27,7 @@ class RenameAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke updates current composition name when assemblyId matches`() = runTest {
+    fun `assemblyIdが一致する場合は現在の構成名を更新する`() = runTest {
         val composition = Composition(assemblyId = 1, assemblyName = "旧名前", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
 
@@ -37,7 +37,7 @@ class RenameAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke does not update current composition when assemblyId differs`() = runTest {
+    fun `assemblyIdが異なる場合は現在の構成を更新しない`() = runTest {
         val composition = Composition(assemblyId = 99, assemblyName = "別の構成", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
 
@@ -48,7 +48,7 @@ class RenameAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke does not update current composition when no composition selected`() = runTest {
+    fun `構成が選択されていない場合は現在の構成を更新しない`() = runTest {
         fakeCurrentRepo.setCurrentComposition(null)
 
         useCase("新しい名前", assemblyId = 1)

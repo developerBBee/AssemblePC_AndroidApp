@@ -22,7 +22,7 @@ class UpdateCurrentCompositionUseCaseTest {
     )
 
     @Test
-    fun `invoke does nothing when current composition is null`() = runTest {
+    fun `現在の構成がnullの場合は何もしない`() = runTest {
         fakeCurrentRepo.setCurrentComposition(null)
 
         useCase(assemblyId = 1)
@@ -31,7 +31,7 @@ class UpdateCurrentCompositionUseCaseTest {
     }
 
     @Test
-    fun `invoke does nothing when assemblyId does not match current composition`() = runTest {
+    fun `assemblyIdが現在の構成と一致しない場合は何もしない`() = runTest {
         val composition = Composition(assemblyId = 99, assemblyName = "別の構成", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
 
@@ -41,7 +41,7 @@ class UpdateCurrentCompositionUseCaseTest {
     }
 
     @Test
-    fun `invoke saves composition with empty items when assemblies are empty and deleteIfEmpty is false`() = runTest {
+    fun `assemblyが空かつdeleteIfEmptyがfalseの場合は空itemsの構成を保存する`() = runTest {
         val composition = Composition(assemblyId = 1, assemblyName = "テスト構成", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
         // assemblies は空 (デフォルト)
@@ -53,7 +53,7 @@ class UpdateCurrentCompositionUseCaseTest {
     }
 
     @Test
-    fun `invoke clears current composition when assemblies are empty and deleteIfEmpty is true`() = runTest {
+    fun `assemblyが空かつdeleteIfEmptyがtrueの場合は現在の構成をクリアする`() = runTest {
         val composition = Composition(assemblyId = 1, assemblyName = "テスト構成", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
         // assemblies は空 (デフォルト)
@@ -64,7 +64,7 @@ class UpdateCurrentCompositionUseCaseTest {
     }
 
     @Test
-    fun `invoke saves updated composition when assemblies exist`() = runTest {
+    fun `assemblyが存在する場合は更新された構成を保存する`() = runTest {
         val device = createDevice(id = "cpu-1")
         val assembly = createAssembly(assemblyId = 1, assemblyName = "高性能PC", device = device)
         fakeDeviceRepo.assembliesById[1] = mutableListOf(assembly)

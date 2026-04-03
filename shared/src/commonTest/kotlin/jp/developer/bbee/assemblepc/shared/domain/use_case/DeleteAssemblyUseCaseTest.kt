@@ -26,7 +26,7 @@ class DeleteAssemblyUseCaseTest {
     )
 
     @Test
-    fun `invoke deletes specified quantity of assemblies`() = runTest {
+    fun `指定した数量のassemblyを削除する`() = runTest {
         val device = createDevice(id = "ram-1")
         val assembly1 = createAssembly(id = 1, assemblyId = 1, device = device)
         val assembly2 = createAssembly(id = 2, assemblyId = 1, device = device)
@@ -41,7 +41,7 @@ class DeleteAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke does nothing when no matching assemblies found`() = runTest {
+    fun `一致するassemblyが存在しない場合は何もしない`() = runTest {
         fakeDeviceRepo.assembliesById[1] = mutableListOf()
 
         useCase(assemblyId = 1, deviceId = "cpu-99", quantity = 1)
@@ -50,7 +50,7 @@ class DeleteAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke filters by deviceId`() = runTest {
+    fun `deviceIdでフィルタリングして削除する`() = runTest {
         val cpu = createDevice(id = "cpu-1")
         val mem = createDevice(id = "mem-1")
         val cpuAssembly = createAssembly(id = 1, assemblyId = 1, device = cpu)
@@ -65,7 +65,7 @@ class DeleteAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke takes only the specified quantity`() = runTest {
+    fun `指定した数量分のみ削除する`() = runTest {
         val device = createDevice(id = "fan-1")
         val assemblies = (1..5).map { createAssembly(id = it, assemblyId = 1, device = device) }
         fakeDeviceRepo.assembliesById[1] = assemblies.toMutableList()
@@ -76,7 +76,7 @@ class DeleteAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke updates current composition after delete`() = runTest {
+    fun `削除後に現在の構成を更新する`() = runTest {
         val device = createDevice(id = "ssd-1")
         val assembly = createAssembly(id = 1, assemblyId = 2, device = device)
         fakeDeviceRepo.assembliesById[2] = mutableListOf(assembly)

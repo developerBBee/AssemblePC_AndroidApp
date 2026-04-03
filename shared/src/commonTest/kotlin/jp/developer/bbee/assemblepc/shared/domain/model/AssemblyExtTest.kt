@@ -12,7 +12,7 @@ class AssemblyExtTest {
     // --- toCompositionItems ---
 
     @Test
-    fun `toCompositionItems returns single item for one assembly`() {
+    fun `toCompositionItemsはassemblyが1件の場合1つのitemを返す`() {
         val device = createDevice(id = "cpu-1", deviceType = DeviceType.CPU)
         val assembly = createAssembly(assemblyId = 1, device = device)
 
@@ -24,7 +24,7 @@ class AssemblyExtTest {
     }
 
     @Test
-    fun `toCompositionItems groups same device into one item with quantity`() {
+    fun `toCompositionItemsは同じdeviceをquantity付きの1つのitemにまとめる`() {
         val device = createDevice(id = "mem-1", deviceType = DeviceType.MEMORY)
         val assembly1 = createAssembly(id = 1, assemblyId = 1, device = device)
         val assembly2 = createAssembly(id = 2, assemblyId = 1, device = device)
@@ -37,7 +37,7 @@ class AssemblyExtTest {
     }
 
     @Test
-    fun `toCompositionItems filters by assemblyId`() {
+    fun `toCompositionItemsはassemblyIdでフィルタリングする`() {
         val device1 = createDevice(id = "cpu-1")
         val device2 = createDevice(id = "cpu-2")
         val assemblyForId1 = createAssembly(assemblyId = 1, device = device1)
@@ -51,7 +51,7 @@ class AssemblyExtTest {
     }
 
     @Test
-    fun `toCompositionItems excludes assembly whose device is not in devices list`() {
+    fun `toCompositionItemsはdevicesリストに含まれないdeviceのassemblyを除外する`() {
         val device = createDevice(id = "cpu-1")
         val assembly = createAssembly(assemblyId = 1, device = device)
 
@@ -62,14 +62,14 @@ class AssemblyExtTest {
     }
 
     @Test
-    fun `toCompositionItems returns empty for empty assembly list`() {
+    fun `toCompositionItemsはassemblyリストが空の場合空を返す`() {
         val result = emptyList<Assembly>()
             .toCompositionItems(assemblyId = 1, devices = listOf(createDevice()))
         assertTrue(result.isEmpty())
     }
 
     @Test
-    fun `toCompositionItems handles multiple different devices`() {
+    fun `toCompositionItemsは複数の異なるdeviceを正しく処理する`() {
         val cpu = createDevice(id = "cpu-1", deviceType = DeviceType.CPU)
         val mem = createDevice(id = "mem-1", deviceType = DeviceType.MEMORY)
         val gpu = createDevice(id = "gpu-1", deviceType = DeviceType.VIDEO_CARD)

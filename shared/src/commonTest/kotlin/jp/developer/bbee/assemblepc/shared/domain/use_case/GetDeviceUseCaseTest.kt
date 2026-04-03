@@ -17,7 +17,7 @@ class GetDeviceUseCaseTest {
     private val useCase = GetDeviceUseCase(fakeDeviceRepo)
 
     @Test
-    fun `invoke emits Loading then Success`() = runTest {
+    fun `LoadingのあとSuccessを発行する`() = runTest {
         val devices = listOf(createDevice(id = "cpu-1", deviceType = DeviceType.CPU))
         fakeDeviceRepo.deviceListResult = devices
 
@@ -29,7 +29,7 @@ class GetDeviceUseCaseTest {
     }
 
     @Test
-    fun `invoke success contains device list`() = runTest {
+    fun `Successはdeviceリストを含む`() = runTest {
         val devices = listOf(
             createDevice(id = "cpu-1", deviceType = DeviceType.CPU),
             createDevice(id = "cpu-2", deviceType = DeviceType.CPU),
@@ -44,7 +44,7 @@ class GetDeviceUseCaseTest {
     }
 
     @Test
-    fun `invoke emits Loading then Failure on exception`() = runTest {
+    fun `例外発生時はLoadingのあとFailureを発行する`() = runTest {
         fakeDeviceRepo.getDeviceListThrows = RuntimeException("ネットワークエラー")
 
         val results = useCase(DeviceType.CPU).toList()
@@ -55,7 +55,7 @@ class GetDeviceUseCaseTest {
     }
 
     @Test
-    fun `invoke failure contains error message`() = runTest {
+    fun `Failureはエラーメッセージを含む`() = runTest {
         fakeDeviceRepo.getDeviceListThrows = RuntimeException("タイムアウト")
 
         val results = useCase(DeviceType.CPU).toList()

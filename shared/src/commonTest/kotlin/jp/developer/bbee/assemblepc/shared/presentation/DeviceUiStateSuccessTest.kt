@@ -43,7 +43,7 @@ class DeviceUiStateSuccessTest {
     // --- visibleDevices ソート ---
 
     @Test
-    fun `visibleDevices sorted by POPULARITY puts rank 0 at end`() {
+    fun `POPULARITY順ではrank0のdeviceが末尾になる`() {
         val state = buildSuccess(sort = SortType.POPULARITY)
         val visible = state.visibleDevices
 
@@ -53,7 +53,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices sorted by POPULARITY is in ascending rank order`() {
+    fun `POPULARITY順ではrankの昇順に並ぶ`() {
         val state = buildSuccess(
             devices = listOf(deviceC, deviceB, deviceA), // わざと逆順に設定
             sort = SortType.POPULARITY,
@@ -64,7 +64,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices sorted by NEW_ARRIVAL is in descending releaseDate order`() {
+    fun `NEW_ARRIVAL順ではreleaseDateの降順に並ぶ`() {
         val state = buildSuccess(sort = SortType.NEW_ARRIVAL)
         val visible = state.visibleDevices
 
@@ -73,7 +73,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices sorted by PRICE_ASC puts price 0 at end`() {
+    fun `PRICE_ASC順ではprice0のdeviceが末尾になる`() {
         val state = buildSuccess(sort = SortType.PRICE_ASC)
         val visible = state.visibleDevices
 
@@ -83,7 +83,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices sorted by PRICE_ASC is in ascending price order for non-zero prices`() {
+    fun `PRICE_ASC順では非ゼロpriceのdeviceが昇順に並ぶ`() {
         val state = buildSuccess(
             devices = listOf(deviceA, deviceB, deviceC), // rank は揃えない
             sort = SortType.PRICE_ASC,
@@ -95,7 +95,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices sorted by PRICE_DESC is in descending price order for non-zero prices`() {
+    fun `PRICE_DESC順では非ゼロpriceのdeviceが降順に並ぶ`() {
         val state = buildSuccess(
             devices = listOf(deviceA, deviceB, deviceC),
             sort = SortType.PRICE_DESC,
@@ -107,7 +107,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices sorted by PRICE_DESC puts price 0 at end`() {
+    fun `PRICE_DESC順ではprice0のdeviceが末尾になる`() {
         val state = buildSuccess(sort = SortType.PRICE_DESC)
         val visible = state.visibleDevices
 
@@ -118,13 +118,13 @@ class DeviceUiStateSuccessTest {
     // --- visibleDevices 検索フィルタ ---
 
     @Test
-    fun `visibleDevices empty search returns all devices`() {
+    fun `検索テキストが空の場合すべてのdeviceを返す`() {
         val state = buildSuccess(searchText = "")
         assertEquals(allDevices.size, state.visibleDevices.size)
     }
 
     @Test
-    fun `visibleDevices filters by name`() {
+    fun `name検索でフィルタリングされる`() {
         val state = buildSuccess(searchText = "Ryzen")
         val visible = state.visibleDevices
 
@@ -133,7 +133,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices filters by detail`() {
+    fun `detail検索でフィルタリングされる`() {
         val deviceWithDetail = createDevice(id = "ssd-1", name = "NVMe SSD", detail = "超高速PCIe 5.0対応")
         val deviceNoMatch  = createDevice(id = "hdd-1", name = "HDD", detail = "普通のHDD")
         val state = buildSuccess(
@@ -146,7 +146,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices is case insensitive`() {
+    fun `検索は大文字小文字を区別しない`() {
         val state = buildSuccess(searchText = "ryzen")
         val visible = state.visibleDevices
 
@@ -154,7 +154,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices filters with multiple space-separated keywords (AND logic)`() {
+    fun `スペース区切りの複数キーワードでAND検索される`() {
         val state = buildSuccess(searchText = "Core i9")
         val visible = state.visibleDevices
 
@@ -164,13 +164,13 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `visibleDevices returns empty when no device matches search`() {
+    fun `一致するdeviceがない場合空を返す`() {
         val state = buildSuccess(searchText = "存在しないデバイス名")
         assertTrue(state.visibleDevices.isEmpty())
     }
 
     @Test
-    fun `visibleDevices converts half-width katakana to full-width for search`() {
+    fun `半角カタカナは全角に変換されて検索される`() {
         // "ﾒﾓﾘ" (半角) → "メモリ" (全角) に変換されて検索
         val memDevice = createDevice(id = "mem-1", deviceType = DeviceType.MEMORY, name = "DDR5 メモリ 32GB")
         val cpuDevice = createDevice(id = "cpu-1", deviceType = DeviceType.CPU, name = "CPU テスト")
@@ -187,7 +187,7 @@ class DeviceUiStateSuccessTest {
     // --- selectedDevices ---
 
     @Test
-    fun `selectedDevices returns devices in composition matching deviceType`() {
+    fun `selectedDevicesはdeviceTypeに一致するdeviceを返す`() {
         val cpu = createDevice(id = "cpu-1", deviceType = DeviceType.CPU)
         val cpuAssembly = createAssembly(assemblyId = 1, device = cpu)
         val composition = Composition.of(
@@ -210,7 +210,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `selectedDevices returns empty when no device of that type in composition`() {
+    fun `selectedDevicesは対象deviceTypeのdeviceが構成に存在しない場合空を返す`() {
         val cpu = createDevice(id = "cpu-1", deviceType = DeviceType.CPU)
         val cpuAssembly = createAssembly(assemblyId = 1, device = cpu)
         val composition = Composition.of(
@@ -233,7 +233,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `selectedDevices reflects quantity from composition items`() {
+    fun `selectedDevicesは構成itemsのquantityを反映する`() {
         val mem = createDevice(id = "mem-1", deviceType = DeviceType.MEMORY)
         val assembly1 = createAssembly(id = 1, assemblyId = 1, device = mem)
         val assembly2 = createAssembly(id = 2, assemblyId = 1, device = mem)
@@ -257,7 +257,7 @@ class DeviceUiStateSuccessTest {
     }
 
     @Test
-    fun `selectedDevices returns empty when devices list does not contain composition device`() {
+    fun `selectedDevicesはdevicesリストに構成のdeviceが含まれない場合空を返す`() {
         val cpu = createDevice(id = "cpu-1", deviceType = DeviceType.CPU)
         val cpuAssembly = createAssembly(assemblyId = 1, device = cpu)
         val composition = Composition.of(

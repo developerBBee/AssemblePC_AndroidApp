@@ -10,40 +10,40 @@ class PriceTest {
     // --- 四則演算 ---
 
     @Test
-    fun `plus Price adds values`() {
+    fun `Price同士の加算が正しく計算される`() {
         val a = Price(1000)
         val b = Price(500)
         assertEquals(Price(1500), a + b)
     }
 
     @Test
-    fun `plus Int adds int value`() {
+    fun `Int加算が正しく計算される`() {
         val a = Price(1000)
         assertEquals(Price(1300), a + 300)
     }
 
     @Test
-    fun `minus Price subtracts values`() {
+    fun `Price同士の減算が正しく計算される`() {
         val a = Price(1000)
         val b = Price(300)
         assertEquals(Price(700), a - b)
     }
 
     @Test
-    fun `minus Int subtracts int value`() {
+    fun `Int減算が正しく計算される`() {
         val a = Price(1000)
         assertEquals(Price(600), a - 400)
     }
 
     @Test
-    fun `times Price multiplies values`() {
+    fun `Price同士の乗算が正しく計算される`() {
         val a = Price(100)
         val b = Price(3)
         assertEquals(Price(300), a * b)
     }
 
     @Test
-    fun `times Int multiplies by int`() {
+    fun `Int乗算が正しく計算される`() {
         val a = Price(500)
         assertEquals(Price(1500), a * 3)
     }
@@ -51,67 +51,67 @@ class PriceTest {
     // --- 比較 ---
 
     @Test
-    fun `compareTo equal prices returns zero`() {
+    fun `同値のPrice同士のcompareToは0を返す`() {
         val a = Price(500)
         val b = Price(500)
         assertEquals(0, a.compareTo(b))
     }
 
     @Test
-    fun `compareTo greater returns positive`() {
+    fun `大きいPriceのcompareToは正の値を返す`() {
         val a = Price(1000)
         val b = Price(500)
         assertTrue(a > b)
     }
 
     @Test
-    fun `compareTo less returns negative`() {
+    fun `小さいPriceのcompareToは負の値を返す`() {
         val a = Price(100)
         val b = Price(500)
         assertTrue(a < b)
     }
 
     @Test
-    fun `compareTo Int equal returns zero`() {
+    fun `Intと同値のcompareToは0を返す`() {
         assertEquals(0, Price(500).compareTo(500))
     }
 
     @Test
-    fun `compareTo Int greater returns positive`() {
+    fun `Intより大きい場合のcompareToは正の値を返す`() {
         assertTrue(Price(1000).compareTo(500) > 0)
     }
 
     // --- isZero / ZERO_PRICE / MAX_PRICE ---
 
     @Test
-    fun `isZero returns true for ZERO_PRICE`() {
+    fun `isZeroはZERO_PRICEに対してtrueを返す`() {
         assertTrue(ZERO_PRICE.isZero())
     }
 
     @Test
-    fun `isZero returns false for non-zero price`() {
+    fun `isZeroは非ゼロpriceに対してfalseを返す`() {
         assertFalse(Price(1).isZero())
     }
 
     @Test
-    fun `ZERO_PRICE has value zero`() {
+    fun `ZERO_PRICEのvalueは0である`() {
         assertEquals(0, ZERO_PRICE.value)
     }
 
     @Test
-    fun `MAX_PRICE has value Int MAX_VALUE`() {
+    fun `MAX_PRICEのvalueはInt MAX_VALUEである`() {
         assertEquals(Int.MAX_VALUE, MAX_PRICE.value)
     }
 
     // --- yenOrUnknown ---
 
     @Test
-    fun `yenOrUnknown returns localized string for zero price`() {
+    fun `yenOrUnknownはゼロpriceに対して価格情報なしを返す`() {
         assertEquals("価格情報なし", ZERO_PRICE.yenOrUnknown())
     }
 
     @Test
-    fun `yenOrUnknown returns yen string for non-zero price`() {
+    fun `yenOrUnknownは非ゼロpriceに対して円表記を返す`() {
         val price = Price(1000)
         val result = price.yenOrUnknown()
         assertTrue(result != "価格情報なし", "非ゼロ価格は「価格情報なし」以外を返すべき")
@@ -120,49 +120,49 @@ class PriceTest {
     // --- toPrice 拡張関数 ---
 
     @Test
-    fun `toPrice creates Price from Int`() {
+    fun `toPriceはIntからPriceを生成する`() {
         assertEquals(Price(12345), 12345.toPrice())
     }
 
     @Test
-    fun `toPrice with zero creates ZERO_PRICE`() {
+    fun `toPriceに0を渡すとZERO_PRICEが生成される`() {
         assertEquals(ZERO_PRICE, 0.toPrice())
     }
 
     // --- List<Price> 拡張関数 ---
 
     @Test
-    fun `list sum returns total price`() {
+    fun `リストのsumは合計Priceを返す`() {
         val prices = listOf(Price(100), Price(200), Price(300))
         assertEquals(Price(600), prices.sum())
     }
 
     @Test
-    fun `empty list sum returns zero`() {
+    fun `空リストのsumはゼロを返す`() {
         assertEquals(ZERO_PRICE, emptyList<Price>().sum())
     }
 
     @Test
-    fun `hasZero returns true when list contains zero`() {
+    fun `hasZeroはリストにゼロが含まれる場合trueを返す`() {
         val prices = listOf(Price(100), ZERO_PRICE, Price(300))
         assertTrue(prices.hasZero())
     }
 
     @Test
-    fun `hasZero returns false when no zero in list`() {
+    fun `hasZeroはリストにゼロが含まれない場合falseを返す`() {
         val prices = listOf(Price(100), Price(200), Price(300))
         assertFalse(prices.hasZero())
     }
 
     @Test
-    fun `hasZero returns false for empty list`() {
+    fun `hasZeroは空リストに対してfalseを返す`() {
         assertFalse(emptyList<Price>().hasZero())
     }
 
     // --- toString ---
 
     @Test
-    fun `toString returns value as string`() {
+    fun `toStringはvalueを文字列として返す`() {
         assertEquals("9999", Price(9999).toString())
     }
 }

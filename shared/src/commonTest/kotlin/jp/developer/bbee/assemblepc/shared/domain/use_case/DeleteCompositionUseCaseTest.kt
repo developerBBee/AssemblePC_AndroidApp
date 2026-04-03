@@ -24,14 +24,14 @@ class DeleteCompositionUseCaseTest {
     )
 
     @Test
-    fun `invoke deletes assembly by id in repository`() = runTest {
+    fun `repositoryからidでassemblyを削除する`() = runTest {
         useCase(assemblyId = 3)
 
         assertEquals(3, fakeDeviceRepo.deletedAssemblyById)
     }
 
     @Test
-    fun `invoke clears current composition when selected assemblyId is deleted`() = runTest {
+    fun `選択中のassemblyIdが削除された場合は現在の構成をクリアする`() = runTest {
         val composition = Composition(assemblyId = 3, assemblyName = "削除対象", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
 
@@ -42,7 +42,7 @@ class DeleteCompositionUseCaseTest {
     }
 
     @Test
-    fun `invoke does not clear current composition when different assemblyId is deleted`() = runTest {
+    fun `異なるassemblyIdが削除された場合は現在の構成をクリアしない`() = runTest {
         val composition = Composition(assemblyId = 99, assemblyName = "別の構成", items = emptyList())
         fakeCurrentRepo.setCurrentComposition(composition)
 

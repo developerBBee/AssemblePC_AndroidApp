@@ -14,13 +14,13 @@ class GetCompositionsUseCaseTest {
     private val useCase = GetCompositionsUseCase(fakeDeviceRepo)
 
     @Test
-    fun `invoke returns empty list initially`() = runTest {
+    fun `初期状態では空リストを返す`() = runTest {
         val result = useCase().first()
         assertTrue(result.isEmpty())
     }
 
     @Test
-    fun `invoke returns compositions from repository`() = runTest {
+    fun `repositoryのcompositionsを返す`() = runTest {
         val compositions = listOf(
             Composition(assemblyId = 1, assemblyName = "ゲーミングPC", items = emptyList()),
             Composition(assemblyId = 2, assemblyName = "作業用PC", items = emptyList()),
@@ -35,7 +35,7 @@ class GetCompositionsUseCaseTest {
     }
 
     @Test
-    fun `invoke reflects updated compositions`() = runTest {
+    fun `compositionsの更新を反映する`() = runTest {
         fakeDeviceRepo.compositions.value = emptyList()
         val firstResult = useCase().first()
         assertTrue(firstResult.isEmpty())

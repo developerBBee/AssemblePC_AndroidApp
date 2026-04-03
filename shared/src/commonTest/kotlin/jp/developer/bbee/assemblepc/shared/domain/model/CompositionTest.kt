@@ -40,7 +40,7 @@ class CompositionTest {
     // --- getItem ---
 
     @Test
-    fun `getItem returns matching CompositionItem`() {
+    fun `getItem は一致するCompositionItemを返す`() {
         val composition = buildComposition()
         val item = composition.getItem(DeviceType.CPU)
         assertNotNull(item)
@@ -48,7 +48,7 @@ class CompositionTest {
     }
 
     @Test
-    fun `getItem returns null when deviceType is not in items`() {
+    fun `getItem は対象のdeviceTypeがitemsに存在しない場合nullを返す`() {
         // CPU のみの構成で MEMORY を検索 → null
         val composition = buildComposition(devices = listOf(cpu))
         assertNull(composition.getItem(DeviceType.MEMORY))
@@ -57,21 +57,21 @@ class CompositionTest {
     // --- updateReview ---
 
     @Test
-    fun `updateReview sets review text`() {
+    fun `updateReview はレビューテキストを設定する`() {
         val composition = buildComposition()
         val reviewed = composition.updateReview("このPCは高性能です")
         assertEquals("このPCは高性能です", reviewed.reviewText)
     }
 
     @Test
-    fun `updateReview sets non-null reviewTime`() {
+    fun `updateReview はreviewTimeにnull以外の値を設定する`() {
         val composition = buildComposition()
         val reviewed = composition.updateReview("レビュー内容")
         assertNotNull(reviewed.reviewTime)
     }
 
     @Test
-    fun `updateReview preserves assemblyId and name`() {
+    fun `updateReview はassemblyIdと名前を保持する`() {
         val composition = buildComposition(assemblyId = 5, assemblyName = "ゲーミングPC")
         val reviewed = composition.updateReview("テスト")
         assertEquals(5, reviewed.assemblyId)
@@ -79,7 +79,7 @@ class CompositionTest {
     }
 
     @Test
-    fun `updateReview preserves items`() {
+    fun `updateReview はitemsを保持する`() {
         val composition = buildComposition()
         val reviewed = composition.updateReview("テスト")
         assertEquals(composition.items.size, reviewed.items.size)
@@ -88,7 +88,7 @@ class CompositionTest {
     // --- isReviewExpired ---
 
     @Test
-    fun `isReviewExpired returns true when reviewTime is null`() {
+    fun `isReviewExpired はreviewTimeがnullの場合trueを返す`() {
         val composition = buildComposition(reviewTime = null)
         assertTrue(composition.isReviewExpired(Instant.parse("2024-06-01T00:00:00Z")))
     }
@@ -99,7 +99,7 @@ class CompositionTest {
      * また current < nextWeek の場合も期限切れにならない。
      */
     @Test
-    fun `isReviewExpired returns false within one week when updatedAt is before reviewTime`() {
+    fun `isReviewExpired はupdatedAtがreviewTime以前かつ1週間未満の場合falseを返す`() {
         // reviewTime を十分先の未来に設定 → updatedAt(≈now) < reviewTime
         val futureReviewTime = Instant.parse("2099-01-01T00:00:00Z")
         val threeDaysAfterReview = futureReviewTime + 3.days  // 1週間未満
@@ -108,7 +108,7 @@ class CompositionTest {
     }
 
     @Test
-    fun `isReviewExpired returns true after one week`() {
+    fun `isReviewExpired は1週間経過後trueを返す`() {
         val futureReviewTime = Instant.parse("2099-01-01T00:00:00Z")
         val twoWeeksAfterReview = futureReviewTime + 14.days
         val composition = buildComposition(reviewTime = futureReviewTime)
@@ -116,7 +116,7 @@ class CompositionTest {
     }
 
     @Test
-    fun `isReviewExpired returns true when updatedAt is after reviewTime`() {
+    fun `isReviewExpired はupdatedAtがreviewTimeより後の場合trueを返す`() {
         // reviewTime を過去に設定 → updatedAt(≈now) > reviewTime
         val pastReviewTime = Instant.parse("2020-01-01T00:00:00Z")
         val composition = buildComposition(reviewTime = pastReviewTime)
@@ -128,32 +128,32 @@ class CompositionTest {
     // --- Composition.of ---
 
     @Test
-    fun `of creates composition with correct assemblyId and name`() {
+    fun `of は正しいassemblyIdと名前でCompositionを生成する`() {
         val composition = buildComposition(assemblyId = 7, assemblyName = "動画編集PC")
         assertEquals(7, composition.assemblyId)
         assertEquals("動画編集PC", composition.assemblyName)
     }
 
     @Test
-    fun `of creates correct number of items from distinct devices`() {
+    fun `of は異なるdeviceの数だけitemsを生成する`() {
         val composition = buildComposition(devices = listOf(cpu, mem))
         assertEquals(2, composition.items.size)
     }
 
     @Test
-    fun `of preserves reviewText`() {
+    fun `of はreviewTextを保持する`() {
         val composition = buildComposition(reviewText = "良いPCです")
         assertEquals("良いPCです", composition.reviewText)
     }
 
     @Test
-    fun `of sets non-null updatedAt`() {
+    fun `of はupdatedAtにnull以外の値を設定する`() {
         val composition = buildComposition()
         assertNotNull(composition.updatedAt)
     }
 
     @Test
-    fun `of with duplicate device creates single item with quantity 2`() {
+    fun `of は同じdeviceが重複する場合quantity2の単一itemを生成する`() {
         val device = createDevice(id = "ram-1", deviceType = DeviceType.MEMORY)
         val assembly1 = createAssembly(id = 1, assemblyId = 1, device = device)
         val assembly2 = createAssembly(id = 2, assemblyId = 1, device = device)

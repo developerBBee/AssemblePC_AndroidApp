@@ -8,12 +8,7 @@ import kotlin.test.assertFailsWith
 class DeviceTypeTest {
 
     @Test
-    fun `entries count is 19`() {
-        assertEquals(19, DeviceType.entries.size)
-    }
-
-    @Test
-    fun `from returns correct enum for each key`() {
+    fun `from は各キーに対して正しいenumを返す`() {
         val cases = mapOf(
             "pccase"        to DeviceType.PC_CASE,
             "motherboard"   to DeviceType.MOTHER_BOARD,
@@ -35,20 +30,25 @@ class DeviceTypeTest {
             "fancontroller" to DeviceType.FAN_CONTROLLER,
             "casefan"       to DeviceType.CASE_FAN,
         )
+        assertEquals(
+            DeviceType.entries.map { it.key }.toSet(),
+            cases.keys,
+            "cases が全 DeviceType を網羅していない"
+        )
         cases.forEach { (key, expected) ->
             assertEquals(expected, DeviceType.from(key), "key=$key の変換が正しくない")
         }
     }
 
     @Test
-    fun `from throws for unknown key`() {
+    fun `from は不明なキーに対して例外をスローする`() {
         assertFailsWith<NoSuchElementException> {
             DeviceType.from("unknown_key")
         }
     }
 
     @Test
-    fun `each DeviceType has unique key`() {
+    fun `各DeviceTypeのkeyは重複しない`() {
         val keys = DeviceType.entries.map { it.key }
         assertEquals(keys.size, keys.distinct().size, "DeviceType の key に重複がある")
     }

@@ -16,44 +16,44 @@ class DeviceTest {
     )
 
     @Test
-    fun `toAssembly sets correct assemblyId`() {
+    fun `toAssembly は正しいassemblyIdを設定する`() {
         val assembly = device.toAssembly(assemblyId = 42, assemblyName = "ゲーミングPC")
         assertEquals(42, assembly.assemblyId)
     }
 
     @Test
-    fun `toAssembly sets correct assemblyName`() {
+    fun `toAssembly は正しいassemblyNameを設定する`() {
         val assembly = device.toAssembly(assemblyId = 1, assemblyName = "作業用PC")
         assertEquals("作業用PC", assembly.assemblyName)
     }
 
     @Test
-    fun `toAssembly copies deviceId from device`() {
+    fun `toAssembly はdeviceIdをdeviceからコピーする`() {
         val assembly = device.toAssembly(assemblyId = 1, assemblyName = "Test")
         assertEquals("cpu-001", assembly.deviceId)
     }
 
     @Test
-    fun `toAssembly copies deviceType from device`() {
+    fun `toAssembly はdeviceTypeをdeviceからコピーする`() {
         val assembly = device.toAssembly(assemblyId = 1, assemblyName = "Test")
         assertEquals(DeviceType.CPU, assembly.deviceType)
     }
 
     @Test
-    fun `toAssembly copies name from device`() {
+    fun `toAssembly はnameをdeviceからコピーする`() {
         val assembly = device.toAssembly(assemblyId = 1, assemblyName = "Test")
         assertEquals("Ryzen 9 9900X", assembly.deviceName)
     }
 
     @Test
-    fun `toAssembly copies price as both saved and recent`() {
+    fun `toAssembly はpriceをsavedとrecentの両方にコピーする`() {
         val assembly = device.toAssembly(assemblyId = 1, assemblyName = "Test")
         assertEquals(device.price, assembly.devicePriceSaved)
         assertEquals(device.price, assembly.devicePriceRecent)
     }
 
     @Test
-    fun `toAssembly review fields are null by default`() {
+    fun `toAssembly はデフォルトでreviewフィールドがnullである`() {
         val assembly = device.toAssembly(assemblyId = 1, assemblyName = "Test")
         assertNull(assembly.reviewText)
         assertNull(assembly.reviewTime)

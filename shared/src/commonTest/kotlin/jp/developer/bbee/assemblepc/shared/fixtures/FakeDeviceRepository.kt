@@ -16,7 +16,7 @@ class FakeDeviceRepository : DeviceRepository {
     var deviceListResult: List<Device> = emptyList()
     var assembliesById: MutableMap<Int, MutableList<Assembly>> = mutableMapOf()
     val compositions = MutableStateFlow<List<Composition>>(emptyList())
-    var maxAssemblyIdValue: Int? = null
+    val maxAssemblyIdFlow = MutableStateFlow<Int?>(null)
     var getDeviceListThrows: Exception? = null
 
     // --- 呼び出し記録 ---
@@ -27,13 +27,18 @@ class FakeDeviceRepository : DeviceRepository {
     var renamedAssemblyId: Int? = null
     var updatedReview: AssemblyReview? = null
 
+    // --- 永続的なFlow管理 ---
+    private val assemblyFlows = mutableMapOf<Int, MutableStateFlow<List<Assembly>>>()
+
+    private fun assemblyFlow(assemblyId: Int): MutableStateFlow<List<Assembly>> =
+        assemblyFlows.getOrPut(assemblyId) { MutableStateFlow(assembliesById[assemblyId] ?: emptyList()) }
+
     override suspend fun getDeviceList(deviceType: DeviceType): List<Device> {
         getDeviceListThrows?.let { throw it }
         return deviceListResult
     }
 
-    override fun loadAssembly(assemblyId: Int): Flow<List<Assembly>> =
-        MutableStateFlow(assembliesById[assemblyId] ?: emptyList())
+    override fun loadAssembly(assemblyId: Int): Flow<List<Assembly>> = assemblyFlow(assemblyId)
 
     override fun loadCompositions(): Flow<List<Composition>> = compositions
 
@@ -41,21 +46,24 @@ class FakeDeviceRepository : DeviceRepository {
         insertedAssemblies.addAll(assemblies)
         assemblies.forEach { a ->
             assembliesById.getOrPut(a.assemblyId) { mutableListOf() }.add(a)
+            assemblyFlow(a.assemblyId).value = assembliesById[a.assemblyId]?.toList() ?: emptyList()
         }
     }
 
-    override fun loadMaxAssemblyId(): Flow<Int?> = MutableStateFlow(maxAssemblyIdValue)
+    override fun loadMaxAssemblyId(): Flow<Int?> = maxAssemblyIdFlow
 
     override suspend fun deleteAssemblies(assemblies: List<Assembly>) {
         deletedAssemblies.addAll(assemblies)
         assemblies.forEach { a ->
             assembliesById[a.assemblyId]?.remove(a)
+            assemblyFlow(a.assemblyId).value = assembliesById[a.assemblyId]?.toList() ?: emptyList()
         }
     }
 
     override suspend fun deleteAssemblyById(assemblyId: Int) {
         deletedAssemblyById = assemblyId
         assembliesById.remove(assemblyId)
+        assemblyFlow(assemblyId).value = emptyList()
     }
 
     override suspend fun renameAssemblyById(assemblyName: String, assemblyId: Int) {

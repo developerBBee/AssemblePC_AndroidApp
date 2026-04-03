@@ -25,14 +25,14 @@ class AddAssemblyUseCaseTest {
     )
 
     @Test
-    fun `invoke with empty list does nothing`() = runTest {
+    fun `空リストを渡した場合は何もしない`() = runTest {
         useCase(emptyList())
 
         assertTrue(fakeDeviceRepo.insertedAssemblies.isEmpty(), "空リストでは insertAssemblies が呼ばれないこと")
     }
 
     @Test
-    fun `invoke inserts assemblies into repository`() = runTest {
+    fun `assemblyをrepositoryに追加する`() = runTest {
         val device = createDevice(id = "cpu-1")
         val assembly = createAssembly(assemblyId = 1, device = device)
 
@@ -43,7 +43,7 @@ class AddAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke inserts multiple assemblies`() = runTest {
+    fun `複数のassemblyをまとめて追加する`() = runTest {
         val device = createDevice(id = "ram-1")
         val assembly1 = createAssembly(id = 1, assemblyId = 1, device = device)
         val assembly2 = createAssembly(id = 2, assemblyId = 1, device = device)
@@ -54,7 +54,7 @@ class AddAssemblyUseCaseTest {
     }
 
     @Test
-    fun `invoke updates current composition after insert`() = runTest {
+    fun `追加後に現在の構成を更新する`() = runTest {
         val device = createDevice(id = "ssd-1")
         val assembly = createAssembly(assemblyId = 5, device = device)
 
