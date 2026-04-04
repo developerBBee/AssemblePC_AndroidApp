@@ -36,6 +36,7 @@ deploymentTargetSelector.xml
 render.experimental.xml
 !/.idea/scopes
 !/.idea/.name
+!/.idea/dictionaries
 
 # Keystore files
 *.jks
